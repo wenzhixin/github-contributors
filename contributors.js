@@ -36,9 +36,9 @@ request(getOptions(sprintf('https://api.github.com/repos/%s/%s/stats/contributor
             contents.push(
                 '<tr>',
                 '<td>' + (user.name || contributor.author.login) + '</td>',
-                '<td><a href="' + contributor.author.html_url + '">Github/' + contributor.author.login + '</a></td>',
+                '<td><a href="' + contributor.author.html_url + '">' + contributor.author.login + '</a></td>',
                 '<td>' + (user.email ? '<a href="mailto:' + user.email + '">' + user.email + '</a>' : '') + '</td>',
-                '<td>' + (user.blog ? '<a herf="' + user.blog + '">' + user.blog + '</a>' : '') + '</td>',
+                '<td>' + (user.blog ? '<a href="' + user.blog + '">' + user.blog + '</a>' : '') + '</td>',
                 '<td>' + contributor.total + '</td>',
                 '</tr>'
             );
