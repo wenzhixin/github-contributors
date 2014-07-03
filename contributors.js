@@ -5,8 +5,11 @@ var fs = require('fs'),
     moment = require('moment'),
     util = require('util'),
 
-    USER = 'wenzhixin';
-    REPO = 'multiple-select';
+    USER = process.argv[2] || 'wenzhixin',
+    REPO = process.argv[3] ||'multiple-select';
+
+console.log('User:', USER);
+console.log('Repo:', REPO);
 
 request(getOptions(sprintf('https://api.github.com/repos/%s/%s/stats/contributors', USER, REPO)), function(err, res, body) {
     if (err) {
@@ -33,15 +36,31 @@ request(getOptions(sprintf('https://api.github.com/repos/%s/%s/stats/contributor
                 return;
             }
             var user = JSON.parse(body);
-            contents.push(
-                '<tr>',
-                '<td>' + (user.name || contributor.author.login) + '</td>',
-                '<td><a href="' + contributor.author.html_url + '">' + contributor.author.login + '</a></td>',
-                '<td>' + (user.email ? '<a href="mailto:' + user.email + '">' + user.email + '</a>' : '') + '</td>',
-                '<td>' + (user.blog ? '<a href="' + user.blog + '">' + user.blog + '</a>' : '') + '</td>',
-                '<td>' + contributor.total + '</td>',
-                '</tr>'
-            );
+
+            contents.push('<tr>');
+
+            // Author
+            var author = sprintf('<img src="%s" width="32" height="32"> ', user.avatar_url);
+            author += user.email ? sprintf('<a href="mailto:%s">', user.email) : '';
+            author += user.name || contributor.author.login;
+            author += user.email ? '</a>' : '';
+            contents.push(sprintf('<td>%s</td>', author));
+
+            // Github
+            contents.push(sprintf('<td><a href="%s">%s</a></td>',
+                contributor.author.html_url, contributor.author.login));
+
+            // Location
+            contents.push(sprintf('<td>%s</td>', user.location || ''));
+
+            // Blog
+            contents.push(user.blog ? sprintf('<td><a href="%s">%s</a></td>',
+                user.blog, user.blog) : '<td></td>');
+
+            // Commits
+            contents.push(sprintf('<td>%s</td>', contributor.total));
+
+            contents.push('<tr>');
             console.log(sprintf('Add %s: OK...', contributor.author.login));
             callback();
         });
