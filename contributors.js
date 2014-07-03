@@ -6,7 +6,7 @@ var fs = require('fs'),
     util = require('util'),
 
     USER = process.argv[2] || 'wenzhixin',
-    REPO = process.argv[3] ||'multiple-select';
+    REPO = process.argv[3] || 'multiple-select';
 
 console.log('User:', USER);
 console.log('Repo:', REPO);
@@ -69,7 +69,7 @@ request(getOptions(sprintf('https://api.github.com/repos/%s/%s/stats/contributor
             date = new Date();
 
         fs.writeFileSync(sprintf('%s-%s-CONTRIBUTORS.md', USER, REPO),
-            sprintf(template, contents.join('\n'), moment(new Date()).format('YYYY-MM-DD')));
+            sprintf(template, REPO, contents.join('\n'), moment(new Date()).format('YYYY-MM-DD')));
         console.log('OK...');
     });
 });
